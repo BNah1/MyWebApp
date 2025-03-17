@@ -22,7 +22,7 @@
         <div class="row">
             <label class="col-sm-3 col-form-label">Id</label>
             <div class="col-sm-5">
-                    <input class="form-control" asp-for="id">
+                    <input class="form-control" asp-for="id" readonly>
                     <span asp-validation-for="id" class="text-danger"></span>
             </div>
         </div>
@@ -96,11 +96,14 @@
 
                 <!-- Button -->
                 <td style="white-space: nowrap;">
-
                     <form method="post" asp-page-handler="OnPost" class="d-inline">
                         <input type="hidden" name="id" value="@employee.id">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
+
+                    <div class="d-inline">
+                        <a class = "btn btn-primary btn-sm" href="/Employees/Detail/@employee.id" >Detail</a>
+                    </div>
 
                 </td>
             </tr>

@@ -76,3 +76,4 @@
 /Users/baonhan/Desktop/emsc/net/MyWebApp/bin/Debug/net8.0/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll
 /Users/baonhan/Desktop/emsc/net/MyWebApp/obj/Debug/net8.0/MyWebApp.csproj.AssemblyReference.cache
 /Users/baonhan/Desktop/emsc/net/MyWebApp/obj/Debug/net8.0/MyWebApp.csproj.Up2Date
+/Users/baonhan/Desktop/emsc/net/MyWebApp/obj/Debug/net8.0/MyWebApp.sourcelink.json

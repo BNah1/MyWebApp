@@ -1,0 +1,33 @@
+@page
+@model MyWebApp.Pages.DashBoardInformation.Index
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2 class = "text-center mb-3"> DashBoard Information</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ten</th>
+            <th>Email</th>
+            <th>SDT</th>
+            <th>Ten chuc vu</th>
+            <th>Ten cong ty</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(var info in Model.list){
+            <tr>
+                <td>@info.id</td>
+                <td>@info.ten</td>
+                <td>@info.email</td> 
+                <td>@info.sodienthoai</td>
+                <td>@info.tenchucvu</td>
+                <td>@info.tencongty</td>
+            </tr>
+        }
+    </tbody>
+</table>
