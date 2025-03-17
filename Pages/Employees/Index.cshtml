@@ -1,0 +1,120 @@
+@page
+@model MyWebApp.Pages.Employees.Index
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2 class = "text-center mb-3"> List of Employees</h2>
+
+@if (TempData["SuccessMessage"] != null)
+    {
+         <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+@if (TempData["ErrorMessage"] != null)
+    {
+      <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+<!-- Form information after click one object -->
+<form method="post" asp-page-handler="Update">
+    <div class="row mb-3">
+    <div class="col mb-6">
+        <div class="row">
+            <label class="col-sm-3 col-form-label">Id</label>
+            <div class="col-sm-5">
+                    <input class="form-control" asp-for="id">
+                    <span asp-validation-for="id" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-6">
+        <div class="row">
+            <label class="col-sm-3 col-form-label">Ten</label>
+            <div class="col-sm-5">
+                <input class="form-control" asp-for="ten">
+                <span asp-validation-for="ten" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col mb-6">
+        <div class="row">
+            <label class="col-sm-3 col-form-label">Ma chuc vu</label>
+             <div class="col-sm-5">
+                    <input class="form-control" asp-for="machucvu">
+                    <span asp-validation-for="machucvu" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-6">
+        <div class="row">
+            <label class="col-sm-3 col-form-label">Ma cong ty</label>
+            <div class="col-sm-5">
+                <input class="form-control" asp-for="macongty">
+                <span asp-validation-for="macongty" class="text-danger"></span>
+            </div>
+        </div>
+    </div>    
+</div>
+    <div class="row">
+        <div class="col mb-3">
+        <form method="post" asp-page-handler="OnPostUpdate">
+            <button type="submit" class="btn btn-primary mb-3">Edit</button>
+        </form>
+        </div>
+
+
+        <div class="col mb-3">
+            <a class = "btn btn-primary mb-3" href="/Employees/Create" > New Employees</a>
+        </div>
+    </div>
+
+</form>
+
+
+<!-- Table List Employees -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ten</th>
+            <th>Ma chuc vu</th>
+            <th>Ma cong ty</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <!-- Information of Employee -->
+    <tbody>
+        @foreach(var employee in Model.EmployeeList){
+            <tr onclick="fillForm('@employee.id','@employee.ten','@employee.machucvu','@employee.macongty')">
+                <td>@employee.id</td>
+                <td>@employee.ten</td>
+                <td>@employee.machucvu</td>
+                <td>@employee.macongty</td>
+
+                <!-- Button -->
+                <td style="white-space: nowrap;">
+
+                    <form method="post" asp-page-handler="OnPost" class="d-inline">
+                        <input type="hidden" name="id" value="@employee.id">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<script>
+    function fillForm(id,ten,machucvu,macongty){
+        document.getElementById('id').value = id;
+        document.getElementById('ten').value = ten;
+        document.getElementById('machucvu').value = machucvu;
+        document.getElementById('macongty').value = macongty;
+    }
+</script>

@@ -1,0 +1,68 @@
+@page
+@model MyWebApp.Pages.Employees.Create
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <div class="col-sm-8 mx-auto rounded border p-4">
+        <h2 class="text-center mb-5">New Customer</h2>
+
+
+        @if (Model.ErrorMessage.Length>0){
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>@Model.ErrorMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+
+
+        <form method="post">
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">ID</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="id">
+                    <span asp-validation-for="id" class="text-danger"></span>
+                </div>
+            </div>
+
+             <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Ten</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="ten">
+                    <span asp-validation-for="ten" class="text-danger"></span>
+                </div>
+            </div>
+
+             <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Ma chuc vu</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="machucvu">
+                    <span asp-validation-for="machucvu" class="text-danger"></span>
+                </div>
+            </div>
+
+             <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Ma cong ty</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="macongty">
+                    <span asp-validation-for="macongty" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row ">
+                <div class="offset-sm-4 col-sm-4 d-grid">
+                   <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+                <div class="col-sm-4 d-grid">
+                   <a class="btn btn-outline-primary" href="/Employees/Index" role="button">Cancel</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
