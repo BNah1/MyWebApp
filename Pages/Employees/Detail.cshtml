@@ -1,0 +1,32 @@
+@page "{id}"
+@model MyWebApp.Pages.Employees.Detail
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<!-- Table List Employees -->
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ten</th>
+            <th>Email</th>
+            <th>SDT</th>
+            <th>Ten chuc vu</th>
+            <th>Ten cong ty</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>@Model.employee[0]</td>
+            <td>@Model.employee[1]</td>
+            <td>@Model.employee[2]</td> 
+            <td>@Model.employee[3]</td>
+            <td>@Model.employee[4]</td>
+            <td>@Model.employee[5]</td>
+            </tr>
+
+    </tbody>
+</table>

@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/Users/baonhan/Desktop/emsc/net/MyWebApp/wwwroot/js/dashboardinformation.js",
+      "PackagePath": "staticwebassets/js/dashboardinformation.js"
+    },
+    {
+      "Id": "/Users/baonhan/Desktop/emsc/net/MyWebApp/wwwroot/js/employees.js",
+      "PackagePath": "staticwebassets/js/employees.js"
+    },
+    {
       "Id": "/Users/baonhan/Desktop/emsc/net/MyWebApp/wwwroot/js/site.js",
       "PackagePath": "staticwebassets/js/site.js"
     },

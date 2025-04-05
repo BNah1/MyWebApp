@@ -6,6 +6,42 @@
 
 <h2 class = "text-center mb-3"> DashBoard Information</h2>
 
+
+<!-- Form searching -->
+
+<form method="get" class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" name="searchId" class="form-control" placeholder="Search by ID" value="@Model.searchId" />
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="searchTen" class="form-control" placeholder="Search by Ten" value="@Model.searchTen">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="searchEmail" class="form-control" placeholder="Search by Email" value="@Model.searchEmail" />
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="searchSDT" class="form-control" placeholder="Search by SDT" value="@Model.searchSDT">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="searchTenChucVu" class="form-control" placeholder="Search by Ten chuc vu" value="@Model.searchTenChucVu">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="searchTenCongTy" class="form-control" placeholder="Search by Ten cong ty" value="@Model.searchTenCongTy">
+        </div>
+
+    </div>
+        <div class="row mt-2">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="/DashBoardInformation/Index" class="btn btn-secondary">Clear</a>
+        </div>
+    </div>
+
+</form>
+
+
+<!-- Table List information -->
 <table class="table">
     <thead>
         <tr>

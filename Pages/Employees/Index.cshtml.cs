@@ -8,14 +8,30 @@ namespace MyWebApp.Pages.Employees
     public class Index : PageModel
     {
         public List<EmployeesInfo> EmployeeList { get; set;} = [];
+
+
+        // Post properties
         [BindProperty, Required(ErrorMessage = "id is required")]
         public required string id { get; set; }
         [BindProperty, Required(ErrorMessage = "ten is required")]
         public required string ten { get; set; }
         [BindProperty]
-        public required string machucvu { get; set; }
+        public string? machucvu { get; set; }
         [BindProperty]
-        public required string macongty { get; set; }
+        public string? macongty { get; set; }
+
+
+        // Search properties
+        [BindProperty (SupportsGet = true)]
+        public string? searchId { get; set; }
+        [BindProperty (SupportsGet = true)]
+        public string? searchTen { get; set; }
+        [BindProperty (SupportsGet = true)]
+        public string? searchMachucvu { get; set; }
+        [BindProperty (SupportsGet = true)]
+        public string? searchMacongty { get; set; }
+
+
 
         public string ErrorMessage { get; set;} = "";
 
@@ -27,9 +43,38 @@ namespace MyWebApp.Pages.Employees
                 using (var connection = new SqlConnection(connectionString)){
                     connection.Open();
 
-                    string sql = "select * from employees order by id desc";
+                    // Build dynamic SQL query with search filters
+                    string sql = "SELECT * FROM employees WHERE 1=1";
+                    var parameters = new List<SqlParameter>();
+
+                    if (!string.IsNullOrEmpty(searchId))
+                    {
+                        sql += " AND id LIKE @searchId";
+                        parameters.Add(new SqlParameter("@searchId", $"%{searchId}%"));
+                    }
+                    if (!string.IsNullOrEmpty(searchTen))
+                    {
+                        sql += " AND ten LIKE @searchTen";
+                        parameters.Add(new SqlParameter("@searchTen", $"%{searchTen}%"));
+                    }
+                    if (!string.IsNullOrEmpty(searchMachucvu))
+                    {
+                        sql += " AND machucvu LIKE @searchMachucvu";
+                        parameters.Add(new SqlParameter("@searchMachucvu", $"%{searchMachucvu}%"));
+                    }
+                    if (!string.IsNullOrEmpty(searchMacongty))
+                    {
+                        sql += " AND macongty LIKE @searchMacongty";
+                        parameters.Add(new SqlParameter("@searchMacongty", $"%{searchMacongty}%"));
+                    }
+
+                    sql += " ORDER BY id DESC";
 
                     using(SqlCommand cmd = new SqlCommand(sql, connection)){
+                    foreach (var parameter in parameters)
+                        {
+                            cmd.Parameters.Add(parameter);
+                        }
                         using(SqlDataReader reader = cmd.ExecuteReader()){
                             while(reader.Read()){
                                 EmployeesInfo employeeInfo = new EmployeesInfo();
@@ -51,10 +96,45 @@ namespace MyWebApp.Pages.Employees
             }
         }
 
-        public IActionResult OnPostUpdate(){
-            if(!ModelState.IsValid){
+
+        public IActionResult OnPostDeleteMulti(List<string> selectedIds){
+
+            if (selectedIds == null || !selectedIds.Any())
+            {
+                TempData["ErrorMessage"] = "No employees selected for deletion.";
                 return RedirectToPage();
             }
+            try
+            {
+                string connectionString = "Server=localhost;Database=StaffManagement;User ID=sa;Password=@Nhan1234;Encrypt=False;TrustServerCertificate=True;";
+                using (var connection = new SqlConnection(connectionString)){
+                    connection.Open();
+                    int deletedNumber = 0;
+                    foreach(var id in selectedIds){
+                        var sql = "delete from thongtincanhannhanvien where id = @id ; delete from employees where id = @id";
+                        using(SqlCommand cmd = new SqlCommand(sql,connection)){
+                        cmd.Parameters.AddWithValue("@id",id);
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        if (rowsAffected > 0){
+                            deletedNumber++;
+                            } 
+                        }
+                    }
+                    
+                    TempData["SuccessMessage"] = $"{deletedNumber} employee(s) successfully deleted.";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"An unexpected error occurred: {e.Message}";
+            }
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostUpdate(){
+            // if(!ModelState.IsValid){
+            //     return RedirectToPage();
+            // }
             try
             {
                 string connectionString = "Server=localhost;Database=StaffManagement;User ID=sa;Password=@Nhan1234;Encrypt=False;TrustServerCertificate=True;";
@@ -85,7 +165,7 @@ namespace MyWebApp.Pages.Employees
             return RedirectToPage();
         }
 
-        public IActionResult OnPost(){
+        public IActionResult OnPostDelete(){
             
             if(string.IsNullOrEmpty(id)){
                 TempData["ErrorMessage"] = "ID cannot be empty.";
@@ -98,9 +178,7 @@ namespace MyWebApp.Pages.Employees
                 
                 using(var connection  = new SqlConnection(connectionString)){
                     connection.Open();
-                    var sql = "delete from employees where id = @id "+
-                              "delete from thongtincanhannhanvien where id = @id"
-                    ;
+                    var sql = "delete from thongtincanhannhanvien where id = @id; delete from employees where id = @id ";
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
                         command.Parameters.AddWithValue("@id",id); // lay id tai hang ma minh click 

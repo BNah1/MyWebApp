@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Logging;
 
 namespace MyWebApp.Pages.DashBoardInformation
 {
@@ -14,6 +8,21 @@ namespace MyWebApp.Pages.DashBoardInformation
     {
         public List<Information> list { get; set;} = [];
         public string ErrorMessage { get; set;} = "";
+        
+        // Search properties
+        [BindProperty (SupportsGet = true)]
+        public string? searchId { get; set;}
+        [BindProperty (SupportsGet = true)]
+        public string? searchTen { get; set;}
+        [BindProperty (SupportsGet = true)]
+        public string? searchEmail { get; set;}
+        [BindProperty (SupportsGet = true)]
+        public string? searchSDT { get; set;}
+        [BindProperty (SupportsGet = true)]
+        public string? searchTenChucVu { get; set;}
+        [BindProperty (SupportsGet = true)]
+        public string? searchTenCongTy { get; set;}
+
 
 
         public void OnGet()
@@ -24,9 +33,47 @@ namespace MyWebApp.Pages.DashBoardInformation
                 using (var connection = new SqlConnection(connectionString))
                 {
                   connection.Open();   
-                  var sql = "select e.id,e.ten,t.email,t.sodienthoai,c.tenchucvu,y.tencongty from employees e JOIN thongtincanhannhanvien t on e.id = t.id JOIN chucvu c on e.machucvu = c.machucvu JOIN congty y on e.macongty = y.macongty";
+                  var sql = "select e.id,e.ten,t.email,t.sodienthoai,c.tenchucvu,y.tencongty from employees e JOIN thongtincanhannhanvien t on e.id = t.id JOIN chucvu c on e.machucvu = c.machucvu JOIN congty y on e.macongty = y.macongty WHERE 1=1";
+                  var parameters = new List<SqlParameter>();
+
+                  if (!string.IsNullOrEmpty(searchId)){
+                    sql += " and e.id like @searchId";
+                    parameters.Add(new SqlParameter("@searchId", $"%{searchId}%"));
+                  }
+                  
+                  if (!string.IsNullOrEmpty(searchTen)){
+                    sql += " and e.ten like @searchTen";
+                    parameters.Add(new SqlParameter("@searchTen", $"%{searchTen}%"));
+                  }                  
+                  
+                  if (!string.IsNullOrEmpty(searchEmail)){
+                    sql += " and t.email like @searchEmail";
+                    parameters.Add(new SqlParameter("@searchEmail", $"%{searchEmail}%"));
+                  }                  
+                  
+                  if (!string.IsNullOrEmpty(searchSDT)){
+                    sql += " and t.sodienthoai like @searchSDT";
+                    parameters.Add(new SqlParameter("@searchSDT", $"%{searchSDT}%"));
+                  }
+                                    
+                  if (!string.IsNullOrEmpty(searchTenChucVu)){
+                    sql += " and c.tenchucvu like @searchTenChucVu";
+                    parameters.Add(new SqlParameter("@searchTenChucVu", $"%{searchTenChucVu}%"));
+                  }                  
+                  if (!string.IsNullOrEmpty(searchTenCongTy)){
+                    sql += " and y.tencongty like @searchTenCongTy";
+                    parameters.Add(new SqlParameter("@searchTenCongTy", $"%{searchTenCongTy}%"));
+                  }      
+
+                  sql += " ORDER BY id DESC";
+
+
                   using (var cmd = new SqlCommand(sql, connection))
                   {
+                        foreach (var parameter in parameters)
+                    {
+                        cmd.Parameters.Add(parameter);
+                    }
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read()){
@@ -37,7 +84,10 @@ namespace MyWebApp.Pages.DashBoardInformation
                             info.sodienthoai = reader.GetString(3);
                             info.tenchucvu = reader.GetString(4);
                             info.tencongty = reader.GetString(5);        
-                            list.Add(info);     
+                            if (!list.Any(i => i.id == info.id))
+                            {
+                                list.Add(info);     
+                            }      
                         }
                     }
                   }
@@ -49,8 +99,6 @@ namespace MyWebApp.Pages.DashBoardInformation
                 throw;
             }
         }
-
-
 
         public class Information{
             public string id { get; set;}
